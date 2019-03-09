@@ -1,0 +1,10 @@
+# Install grafana from github
+- name: grafana
+  src: https://github.com/redhat-cip/ansible-role-grafana.git
+  version: origin/master
+
+# Install influxdb from github
+- name: influxdb
+  src: https://github.com/rossmcdonald/influxdb.git
+  version: origin/master
+ 
