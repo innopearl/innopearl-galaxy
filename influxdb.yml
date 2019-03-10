@@ -4,5 +4,8 @@
   tasks:
   - name: epel latest release
     shell: |
-      echo "c.f. https://influxdbcom.readthedocs.io/en/latest/content/docs/v0.9/introduction/installation/"
       yum -y install http://influxdb.s3.amazonaws.com/influxdb-0.9.4.1-1.x86_64.rpm
+
+
+#c.f. https://influxdbcom.readthedocs.io/en/latest/content/docs/v0.9/introduction/installation/
+#c.f. https://docs.influxdata.com/influxdb/v1.0/introduction/getting_started/

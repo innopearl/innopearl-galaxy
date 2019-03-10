@@ -1,0 +1,68 @@
+---
+#https://www.rittmanmead.com/blog/2016/07/system-metrics-collectors/
+- hosts: aws02
+  become: true
+  tasks:
+
+  ####### TELEGRAF 
+  - name: Check if telegraf is installed
+    command: rpm -q telegraf
+    failed_when: no
+    register: rpm_check
+
+  - name: install telegraf 
+    shell: | 
+      yum install -y https://dl.influxdata.com/telegraf/releases/telegraf-1.10.0-1.x86_64.rpm
+      #http://get.influxdb.org/telegraf/telegraf-0.12.0-1.x86_64.rpm
+    when: rpm_check.rc == 1 #rpm_check.stdout.find('is not installed') != -1
+
+  - service:
+      name: telegraf 
+      state: started
+
+
+  ####### SYSSTAT
+  - name: install sysstat 
+    package: 
+      name: sysstat
+      state: present 
+
+  # Add a line to a file if the file does not exist, without passing regexp
+  - lineinfile:
+      path: /etc/default/sysstat
+      line: 'SELINUX="true"'
+      create: yes
+
+  - lineinfile:
+      path: /etc/default/sysstat
+      regexp: '^ENABLED= *"false"'
+      line: 'SELINUX="true"'
+
+  - service:
+      name: sysstat 
+      state: restarted
+
+  ####### COLLECTL
+  - name: install collectl 
+    package: 
+      name: collectl
+      state: present 
+
+  - service:
+      name: collectl 
+      state: started
+
+
+  ####### TOPBEAT
+  - name: Check if topbeat is installed
+    command: rpm -q topbeat
+    failed_when: no
+    register: rpm_check
+
+  - name: install topbeat 
+    shell: | 
+      yum install -y https://download.elastic.co/beats/topbeat/topbeat-1.2.1-x86_64.rpm
+    when: rpm_check.rc == 1 #rpm_check.stdout.find('is not installed') != -1
+
+  - service:
+      name: topbeat 
