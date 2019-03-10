@@ -1,0 +1,8 @@
+---
+- hosts: aws02
+  become: true
+  tasks:
+  - name: epel latest release
+    shell: |
+      echo "c.f. https://influxdbcom.readthedocs.io/en/latest/content/docs/v0.9/introduction/installation/"
+      yum -y install http://influxdb.s3.amazonaws.com/influxdb-0.9.4.1-1.x86_64.rpm
