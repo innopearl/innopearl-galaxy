@@ -1,0 +1,24 @@
+---
+- hosts: aws02
+  tasks:
+  - name: add grafana repo gpgcheck=0 is work around for aws machines
+    become: true
+    shell: |
+      echo "    
+        [grafana]
+        name=grafana
+        baseurl=https://packages.grafana.com/oss/rpm
+        repo_gpgcheck=0
+        enabled=1
+        gpgcheck=1
+        gpgkey=https://packages.grafana.com/gpg.key
+        sslverify=1
+        sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+        " > /etc/yum.repos.d/grafana.repo
+
+#Default user/password
+- hosts: aws02
+  become: true
+  roles:
+    - sbouii.grafana
+

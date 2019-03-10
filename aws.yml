@@ -1,0 +1,64 @@
+--- # Note: These examples do not set authentication details, see the AWS Guide for details.
+#ansible-vault create aws_keys.yml
+#add the folloing lines: 
+#aws_secret_key: SECRET_KEY
+#aws_access_key: ACCESS_KEY
+#ansible-playbook  -i hosts aws.yml --ask-vault-pass  --tag=create -vvv
+
+- hosts: localhost
+  vars_files:
+    - aws_keys.yml
+  tasks:
+  - name: Basic provisioning example
+    ec2:
+      aws_secret_key: "{{aws_secret_key}}" 
+      aws_access_key: "{{aws_access_key}}" 
+      instance_type: t2.micro
+      image: ami-011b3ccf1bd6db744
+      wait: yes
+      keypair: ansible
+      count: 1 #number of instances to launch
+      region: us-east-1
+      assign_public_ip: yes
+      vpc_subnet_id: subnet-0ca4c66b	
+    tags: ['never', 'create']
+    register: ec2_instance_id
+
+  - debug:
+    msg: "{{ec2_instance_id}}" 
+    tags: ['never', 'create']
+
+  - name: status
+    ec2_instance_facts:
+      aws_secret_key: "{{aws_secret_key}}" 
+      aws_access_key: "{{aws_access_key}}" 
+      region: us-east-1
+      filters:
+         instance-state-name: running
+
+- hosts: aws
+  tasks:
+  - name: add grafana repo
+    become: true
+    shell: |
+      echo "    
+        [grafana]
+        name=grafana
+        baseurl=https://packages.grafana.com/oss/rpm
+        repo_gpgcheck=1
+        enabled=1
+        gpgcheck=1
+        gpgkey=https://packages.grafana.com/gpg.key
+        sslverify=1
+        sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+        " > /etc/yum.repos.d/grafana.repo
+
+
+    #requires for aws machines c.f. https://www.liquidweb.com/kb/enable-epel-repository/
+  - name: epel latest release
+    shell: |
+      #sudo yum install  wget
+      #wget wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+      sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+      sudo yum -y install http://mirror.centos.org/centos/7/extras/x86_64/Packages/container-selinux-2.68-1.el7.noarch.rpm
+
