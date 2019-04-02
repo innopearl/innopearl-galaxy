@@ -1,8 +1,9 @@
 ---
-#requires: ansible-galaxy install geerlingguy.pip
-#requires: ansible-galaxy install geerlingguy.docker
+#ansible-galaxy  install -r requirements.yml
+#   requires: ansible-galaxy install geerlingguy.pip
+#   requires: ansible-galaxy install geerlingguy.docker
 
-- hosts: aws01
+- hosts: dockers
   become: yes
   vars:
     pip_install_packages:
@@ -16,3 +17,16 @@
   #sudo yum install http://mirror.centos.org/centos/7/extras/x86_64/Packages/container-selinux-2.68-1.el7.noarch.rpm
     - geerlingguy.pip
     - geerlingguy.docker
+
+  tasks:
+    - name: grafana
+      docker_image: 
+        name: grafana/grafana
+
+    - name: influxdb
+      docker_image: 
+        name: influxdb
+
+    - name: telegraf
+      docker_image: 
+        name: telegraf
