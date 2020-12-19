@@ -8,6 +8,7 @@
   vars:
     pip_install_packages:
       - name: docker
+        tags: [never, install]
 
   roles:
   #requires for aws machines c.f. https://www.liquidweb.com/kb/enable-epel-repository/
