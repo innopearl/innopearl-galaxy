@@ -1,0 +1,35 @@
+---
+- hosts: localhost
+  vars:
+    settings:
+      - file: ~/.bashrc
+        lines:
+          - alias pbrun='ansible-playbook -i , -vvv' 
+          - alias pbcheck='ansible-playbook -i , -vvv --check' 
+
+      - file: ~/.vimrc
+        lines:
+          - 'autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab' 
+
+  tasks:
+#  - name: .bashrc settings
+#    lineinfile: 
+#      path: ~/.bashrc
+#      create: yes
+#      line: alias pbrun='ansible-playbook -i , -vvv'
+#
+#  - name: vim settings
+#    lineinfile: 
+#      path: ~/.vimrc
+#      create: yes
+#      #      regexp: 'autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab'
+#      line: 'autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab'
+
+  - name: apply settings
+    lineinfile: 
+      create: yes
+      path: "{{ item.0.file }}"
+      line: "{{ item.1 }}"  
+    with_subelements:
+         - "{{ settings }}"
+         - lines
