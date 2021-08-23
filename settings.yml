@@ -12,12 +12,12 @@
 
       - file: ~/.vimrc
         lines:
-          - 'execute pathogen#infect()'
-          - 'set tabstop=4'
-          - 'set background=dark'
-          - 'colorschema desrt'
-          - 'set listchars=tab:→\ ,trail:·,precedes:«,extends:»'
-          - 'autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab' 
+          - execute pathogen#infect()
+          - set tabstop=4
+          - set background=dark
+          - colorschema desrt
+          - set listchars=tab:→\ ,trail:·,precedes:«,extends:»
+          - autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab 
 
   tasks:
   - name: Install some required packages
@@ -75,6 +75,12 @@
     - name: ale
       url: https://github.com/w0rp/ale
 
+  - name: Deploy templated .bashrc_aliases
+    copy:
+      src: templates/.bash_aliases
+      dest: "{{ ansible_env.HOME }}/.bash_aliases"
+      backup: yes
+
   - name: apply some settings (e.g. .bashrc & .vimrc)
     lineinfile: 
       create: yes
@@ -83,3 +89,5 @@
     with_subelements:
          - "{{ settings }}"
          - lines
+
+
