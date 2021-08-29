@@ -1,8 +1,10 @@
 # innopearl-galaxy
 
 ## Purpose: 
-Install all required docker roles on the machine define in hosts file
-ansible-playbook -i hosts docker.yml --ask-sudo-pass -vvv
+- Setup system-wide environemnt
+- Added some sugar to user environment
+- Install all required docker roles on the machine define in hosts file
+> ansible-playbook -i hosts docker.yml --ask-sudo-pass -vvv
 
 ## Steps:
 Run playbook in following orders
