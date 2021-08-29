@@ -1,0 +1,35 @@
+---
+- hosts: localhost
+  vars:
+    settings:
+      - file: /etc/yum.repos.d/CentOS-Linux-PowerTools.repo
+        lines:
+          - enabled=1
+
+  tasks:
+  - name: Install some required packages
+    package:
+      name:
+       - dnf-plugins-core # then yum config-manager --set-enabled powertools
+       #- fzf
+      state: installed
+    become: yes
+
+  - name: apply some system-wide settings 
+    lineinfile: 
+      create: yes
+      path: "{{ item.0.file }}"
+      line: "{{ item.1 }}"  
+    become: yes
+    with_subelements:
+         - "{{ settings }}"
+         - lines
+
+  - name: Install some required packages
+    package:
+      name:
+       - vim-enhanced
+       - ninja-build 
+       #- fzf
+      state: installed
+    become: yes
