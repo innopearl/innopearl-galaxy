@@ -15,21 +15,21 @@
           - execute pathogen#infect()
           - set tabstop=4
           - set background=dark
-          - colorschema desrt
+          - colorschema desert
           - set listchars=tab:→\ ,trail:·,precedes:«,extends:»
           - autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab 
 
   tasks:
-  - name: Install some required packages
-    package:
-      name:
-       - vim-enhanced
-       #- fzf
-      state: installed
-    become: yes
-    tags:
-      - install_packages
-
+          #  - name: Install some required packages
+          #    package:
+          #      name:
+          #       - vim-enhanced
+          #       #- fzf
+          #      state: installed
+          #    become: yes
+          #    tags:
+          #      - install_packages
+          #
   - name: Ensure .vim/{autoload,bundle} directory exists
     file:
       path: "{{ item }}"
